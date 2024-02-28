@@ -32,7 +32,7 @@ func TestFormatEventList(t *testing.T) {
     }
 
     // test for correct event type
-    et := 1
+    et := uint8(1)
     if events[ei].EventType != et {
         t.Fatalf("Event at index %d had mismatched event type %d %d.", ei, et, events[ei].EventType)
     }
@@ -75,7 +75,7 @@ func TestFormatEventMatchesList(t *testing.T) {
     }
 
     // test for correct match number
-    mn := 3
+    mn := uint8(3)
     if matches[mi].MatchNumber != mn {
         t.Fatalf("Match at index %d did not match match number %d.", mi, mn)
     }
@@ -148,7 +148,7 @@ func TestFormatTeamList(t *testing.T) {
         t.Fatalf("Team at index %d did not match number %s.", teamIndex, teamName)
     }
 
-    teamNum := 2106
+    teamNum := uint16(2106)
     if teams[teamIndex].Number != teamNum {
         t.Fatalf("Team at index %d did not match number %d.", teamIndex, teamNum)
     }

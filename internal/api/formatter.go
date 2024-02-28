@@ -9,7 +9,7 @@ import (
 // Team list item type.
 type Team struct {
     Key string `json:"key"`
-    Number int `json:"team_number"`
+    Number uint16 `json:"team_number"`
     Name string `json:"nickname"`
 }
 
@@ -18,7 +18,7 @@ type Team struct {
 type Event struct {
     Key string `json:"key"`
     Name string `json:"name"`
-    EventType int `json:"event_type"`
+    EventType uint8 `json:"event_type"`
     StartDate string `json:"start_date"`
     EndDate string `json:"end_date"`
 }
@@ -27,7 +27,7 @@ type Event struct {
 // Event match item type
 type Match struct {
     Key string `json:"key"`
-    MatchNumber int `json:"match_number"`
+    MatchNumber uint8 `json:"match_number"`
     CompLevel string `json:"comp_level"`
     Alliances MatchAlliances `json:"alliances"`
     ScoreBreakdown *ScoreBreakdowns `json:"score_breakdown"`
@@ -59,7 +59,7 @@ type ScoreDetails struct {
     AutoPoints int `json:"autoPoints"`
     TeleopPoints int `json:"teleopPoints"`
     AdjustPoints int `json:"adjustPoints"`
-    RP int `json:"rp"`
+    RP int8 `json:"rp"`
     // TODO: potentially use map interface to allow for extension to year-specific information
 }
 

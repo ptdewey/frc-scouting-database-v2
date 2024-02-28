@@ -9,7 +9,7 @@ import (
 // TestTeamMatches tests for correct output from TeamMatches.
 // Requires working api requests and formatting systems.
 func TestTeamMatches(t *testing.T) {
-    tm, err := TeamMatches(&matches, "frc2106")
+    tm, err := TeamMatches(matches, "frc2106")
     if err != nil {
         t.Fatalf("%f", err)
     }
@@ -44,7 +44,7 @@ func TestTeamMatchesToCSV(t *testing.T) {
     }
 
     // write team matches 2D array to csv file
-    tm, err := TeamMatchesToCSV(&matches, teamKey, filename)
+    tm, err := TeamMatchesToCSV(matches, teamKey, filename)
     if err != nil || tm == nil {
         t.Fatalf("%v", err)
     }
