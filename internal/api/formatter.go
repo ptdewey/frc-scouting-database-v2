@@ -34,6 +34,7 @@ type Match struct {
     WinningAlliance string `json:"winning_alliance"`
 }
 
+
 type MatchAlliances struct {
     Blue Alliance `json:"blue"`
     Red Alliance `json:"red"`
@@ -52,6 +53,7 @@ type ScoreBreakdowns struct {
     Red ScoreDetails `json:"red"`
 }
 
+
 type ScoreDetails struct {
     TotalPoints int `json:"totalPoints"`
     AutoPoints int `json:"autoPoints"`
@@ -60,7 +62,6 @@ type ScoreDetails struct {
     RP int `json:"rp"`
     // TODO: potentially use map interface to allow for extension to year-specific information
 }
-
 
 
 // FormatEventList formats the output from api.EventList into a data structure

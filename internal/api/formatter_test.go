@@ -17,12 +17,12 @@ func TestFormatEventList(t *testing.T) {
     }
     
     // event index in output array
-    ei := 170
+    ei := 171
 
     // test correct event key
     ek := "2024vagle"
     if events[ei].Key != ek {
-        t.Fatalf("Event at index %d did not match key %s.", ei, ek)
+        t.Fatalf("Event at index %d did not match key %s %s.", ei, ek, events[ei].Key)
     }
 
     // test for correct event name
