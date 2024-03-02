@@ -1,13 +1,13 @@
 package analysis
 
 import (
-    "encoding/csv"
+	"encoding/csv"
+	"errors"
 	"fmt"
-    "os"
+	"os"
 
 	"github.com/ptdewey/frc-scouting-database-v2/internal/api"
 )
-
 
 // Helper function that writes an array of Matches to a csv file.
 // Takes in slice of Match types and a filename for the output csv file.
@@ -15,6 +15,11 @@ import (
 // This function does not modify the global state and has the side effect
 // of creating a file under filename.
 func MatchesToCSV(matches []api.Match, filename string) ([][]string, error) {
+    // Stop if no matches were played
+    if len(matches) == 0 {
+        return nil, errors.New("Event matches had length 0.")
+    }
+
     // create and open new file
     f, err := os.Create(filename)
     if err != nil {

@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"os"
 
@@ -24,12 +25,23 @@ type OPR struct {
 // Takes in []Match type array and outputs []OPR type array and error.
 // Does not modify the global state and has no side effects.
 func CalcEventOPR(matches []api.Match) ([]OPR, error) {
-    // initialize container variables
+    // Initialize container variables
     var alliances [][]string
     var scores, autoScores, teleScores, rp []float64
 
+    // Exit if 0 matches were played
+    if len(matches) == 0 {
+        fmt.Println("Match schedule does not exist.")
+        return nil, errors.New("Match schedule not found for event. OPR cannot be calculated.")
+    }
+    
     // Iterate through matches populating alliances and scores.
     for _, m := range matches {
+        // Skip matches with invalid score breakdown
+        if m.ScoreBreakdown == nil {
+            continue
+        }
+
         // Remove unplayed matches and playoff matches
         if m.ScoreBreakdown.Blue.TotalPoints == -1 || m.CompLevel != "qm" {
             continue
@@ -72,9 +84,10 @@ func CalcEventOPR(matches []api.Match) ([]OPR, error) {
         }
     }
 
-
     // Create matrix, response vector, and output vector
     A := mat.NewDense(r, c, data)
+
+    fmt.Println("made matrix")
 
     // Find expected contributions for each metric
     xs, err := oprHelper(A, scores)

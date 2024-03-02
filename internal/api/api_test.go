@@ -15,7 +15,7 @@ var apiKey string
 
 // Function init initializes variables for tests
 func init() {
-    err := godotenv.Load("../../config/.env")
+    err := godotenv.Load("../../config/app.env")
     if err != nil {
         fmt.Println("Error reading environment file:", err)
         return
