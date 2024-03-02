@@ -1,9 +1,10 @@
-package utils
+package analysis
 
 import (
 	"errors"
 
 	"github.com/ptdewey/frc-scouting-database-v2/internal/api"
+	"github.com/ptdewey/frc-scouting-database-v2/internal/utils"
 )
 
 // Function to get a subset of matches from an event containing only matches a
@@ -16,9 +17,9 @@ func TeamMatches(matches []api.Match, teamKey string) ([]api.Match, error) {
     // where match numbers appear
     var out []api.Match
     for _, m := range matches {
-        if ContainsString(teamKey, m.Alliances.Blue.TeamKeys[:]) {
+        if utils.ContainsString(teamKey, m.Alliances.Blue.TeamKeys[:]) {
             out = append(out, m)
-        } else if ContainsString(teamKey, m.Alliances.Red.TeamKeys[:]) {
+        } else if utils.ContainsString(teamKey, m.Alliances.Red.TeamKeys[:]) {
             out = append(out, m)
         }
     }

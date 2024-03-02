@@ -12,6 +12,7 @@ import (
 var (
     apiKey string
     matches []api.Match
+    m api.Match
 )
 
 // Function init initializes variables for tests.
@@ -24,7 +25,7 @@ func init() {
     apiKey = os.Getenv("API_KEY")
 
     // fetch event data
-    eventKey := "2022chcmp"
+    eventKey := "2023vagle"
     rawMatches, err := api.EventMatchesList(eventKey, apiKey) 
     if err != nil {
         fmt.Printf("Error fetching event matches. %s", eventKey)
@@ -37,4 +38,7 @@ func init() {
         fmt.Printf("Error formatting event matches. %s", eventKey)
         return
     }
+
+    // arbitrary match to check
+    m = matches[12]
 }

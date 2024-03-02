@@ -1,6 +1,10 @@
 package analysis
 
 import (
+	"encoding/csv"
+	"fmt"
+	"os"
+
 	"github.com/ptdewey/frc-scouting-database-v2/internal/api"
 	"github.com/ptdewey/frc-scouting-database-v2/internal/utils"
 	"gonum.org/v1/gonum/mat"
@@ -104,7 +108,7 @@ func CalcEventOPR(matches []api.Match) ([]OPR, error) {
 }
 
 
-// Helper functiont that 
+// TODO: docs
 func oprHelper(A mat.Matrix, s []float64) ([]float64, error) {
     // Create response vector
     b := mat.NewVecDense(len(s), s)
@@ -117,6 +121,7 @@ func oprHelper(A mat.Matrix, s []float64) ([]float64, error) {
         return nil, err
     }
 
+    // initialize oupput array
     out := make([]float64, x.Len())
     
     // Convert from vector to array
@@ -125,4 +130,58 @@ func oprHelper(A mat.Matrix, s []float64) ([]float64, error) {
     }
 
     return out, nil
+}
+
+
+
+// TODO: docs
+func OPRToCSV(oprs []OPR, filename string) ([][]string, error) {
+    // create and open new file
+    f, err := os.Create(filename)
+    if err != nil {
+        return nil, err
+    }
+    defer f.Close()
+
+    // Create new csv file writer
+    w := csv.NewWriter(f)
+    defer w.Flush()
+
+    // create 2D array to store rows
+    var out [][]string
+    
+    // csv header
+    h := []string {
+        "team_key", "opr", "auto_opr", "tele_opr", "rp_opr",
+    }
+    out = append(out, h)
+
+    // iterate through oprs, adding to out
+    for _, m := range oprs {
+        out = append(out, OPRToCSVRow(m))
+    }
+    
+    // write out to csv file
+    if err := w.WriteAll(out); err != nil {
+        return nil, err
+    }
+
+    return out, nil
+}
+
+
+// TODO: docs
+func OPRToCSVRow(o OPR) []string {
+    var out []string
+
+    // Append opr data to output row
+    out = append(out,
+        o.TeamKey,
+        fmt.Sprint(o.OPR),
+        fmt.Sprint(o.AutoOPR),
+        fmt.Sprint(o.TeleopOPR),
+        fmt.Sprint(o.RPOPR),
+    )
+
+    return out
 }
