@@ -40,6 +40,9 @@ func Start(botToken string, channelID string, cronSchedule string) error {
 
         zipToDiscord(dg, channelID, sourceDir, targetZip)
     })
+    if err != nil {
+        return err
+    }
 
     // Start cron scheduler
     c.Start()

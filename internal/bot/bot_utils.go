@@ -79,7 +79,6 @@ func zipToDiscord(s *discordgo.Session, channelID string, sourceDir string, targ
         return err
     }
 
-    // upload
     fmt.Println(channelID)
     err = uploadToDiscord(s, channelID, targetZipPath)
     if err != nil {

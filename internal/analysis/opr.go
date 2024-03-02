@@ -87,8 +87,6 @@ func CalcEventOPR(matches []api.Match) ([]OPR, error) {
     // Create matrix, response vector, and output vector
     A := mat.NewDense(r, c, data)
 
-    fmt.Println("made matrix")
-
     // Find expected contributions for each metric
     xs, err := oprHelper(A, scores)
     if err != nil {
@@ -145,6 +143,8 @@ func oprHelper(A mat.Matrix, s []float64) ([]float64, error) {
     return out, nil
 }
 
+// TODO: sort highest to lowest
+// TODO: (match file) sort by match number/key
 
 
 // TODO: docs
