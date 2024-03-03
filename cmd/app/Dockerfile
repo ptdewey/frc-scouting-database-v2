@@ -18,7 +18,4 @@ RUN addgroup -g $GID appgroup && \
 RUN chown -R appuser:appgroup /app
 USER appuser
 
-RUN ls -la /app/cmd/app
-RUN pwd
-
 ENTRYPOINT [ "go", "run", "/app/cmd/app/main.go" ]

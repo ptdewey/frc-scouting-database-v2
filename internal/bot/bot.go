@@ -12,7 +12,13 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
-// TODO: expand to accept multiple channel IDs?
+
+// Function Start provides a forward-facing wrapper function for starting
+// the discord bot application, as well as creating a cron job for 
+// automatic upload of output data.
+// It takes in a discord bot token, a discord channel id which is used
+// to specify the channel automated updates should be posted to, and
+// a cron schedule string to define the job.
 func Start(botToken string, channelID string, cronSchedule string) error {
     // create new discord session
     dg, err := discordgo.New("Bot " + botToken)
@@ -38,6 +44,7 @@ func Start(botToken string, channelID string, cronSchedule string) error {
         sourceDir := filepath.Join("output", fmt.Sprint(year))
         targetZip := filepath.Join("output", fmt.Sprint(year) + "_data.zip")
 
+        // TODO: expand to accept multiple channel IDs?
         zipToDiscord(dg, channelID, sourceDir, targetZip)
     })
     if err != nil {

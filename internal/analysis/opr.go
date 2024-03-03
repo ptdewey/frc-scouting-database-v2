@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"sort"
 
 	"github.com/ptdewey/frc-scouting-database-v2/internal/api"
 	"github.com/ptdewey/frc-scouting-database-v2/internal/utils"
@@ -115,11 +116,19 @@ func CalcEventOPR(matches []api.Match) ([]OPR, error) {
         oprs[i].RPOPR = xr[i]
     }
 
+    // Sort output
+    sort.Slice(oprs, func(i, j int) bool {
+        return oprs[i].OPR > oprs[j].OPR
+    })
+
     return oprs, nil
 }
 
 
-// TODO: docs
+// Function oprHelper solves the linear system for input matrix A and
+// input slice (vector) s, outputting a slice.
+// Can fail in cases where the matrix is singular or nearly singular.
+// It does not modify the global state and has no side effects.
 func oprHelper(A mat.Matrix, s []float64) ([]float64, error) {
     // Create response vector
     b := mat.NewVecDense(len(s), s)
@@ -143,11 +152,9 @@ func oprHelper(A mat.Matrix, s []float64) ([]float64, error) {
     return out, nil
 }
 
-// TODO: sort highest to lowest
-// TODO: (match file) sort by match number/key
 
-
-// TODO: docs
+// Function OPRToCSV converts an OPR type slice into a 2D string array
+// and then writes it to a csv file called 'filename'.
 func OPRToCSV(oprs []OPR, filename string) ([][]string, error) {
     // create and open new file
     f, err := os.Create(filename)
@@ -183,7 +190,8 @@ func OPRToCSV(oprs []OPR, filename string) ([][]string, error) {
 }
 
 
-// TODO: docs
+// Function OPRToCSVRow is a helper function for OPRToCSV that converts
+// a singular OPR object 'o' to a string slice, formatted as a csv file row.
 func OPRToCSVRow(o OPR) []string {
     var out []string
 

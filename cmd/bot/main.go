@@ -8,7 +8,9 @@ import (
 	"github.com/ptdewey/frc-scouting-database-v2/internal/bot"
 )
 
-// TODO: docs
+// Function main is the driver function for the exporter bot.
+// It creates a discord bot and cron scheduler for automated
+// sending of messages.
 func main() {
     // Load .env file
     err := godotenv.Load("config/bot.env")
@@ -32,7 +34,7 @@ func main() {
     }
     
     // Define cron job
-    cronSchedule := "1,31 6-22 * * 5,6,0"
+    cronSchedule := "1,31 9-19 * * 5,6,0"
 
     // Start bot
     bot.Start(botToken, channelID, cronSchedule)

@@ -11,7 +11,10 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
-// TODO: docs
+
+// Function main is the driver function for the statistics aggregation
+// portion of the application. It determines which events data should
+// be fetched for, and the schedule for when it should fetch the data.
 func main() {
     // Load .env file and fetch TBA api key
     err := godotenv.Load("config/app.env")
@@ -24,13 +27,14 @@ func main() {
     // TODO: define as all current events (use EventList and dates)
     eventKeys := []string {
         "2024vaash", "2024vabla",
+        "2024caph", "2024miket", "2024paca", "2024flwp", "2024casj",
     }
 
     // Create new cron scheduler
     c := cron.New()
 
     // Currently running every 5 minutes
-    c.AddFunc("*/5 6-22 * * 5,6,0", func(){
+    c.AddFunc("*/5 8-22 * * 5,6,0", func(){
         fmt.Println("Running scheduled job...")
 
         // Get event data for specified event(s)

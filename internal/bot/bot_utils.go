@@ -1,17 +1,19 @@
 package bot
 
 import (
-    "fmt"
-    "os"
-    "path/filepath"
-    "strings"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/ptdewey/frc-scouting-database-v2/internal/utils"
 )
 
-
-// discord message creation handler
+// Function messageCreate is the message creation handler for a discord
+// client session. It reads messages and parses them for commands,
+// responding when necessary.
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
     // prevent recursive messages
     if m.Author.ID == s.State.User.ID {
@@ -29,16 +31,15 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
         }
         eventKey := m.Content[i + 1:]
 
-        // Define source directory for data (targets year directory)
-        sourceDir := filepath.Join("output", m.Content[i + 1:i + 5])
-
         // check if event key matches
         if eventKey == "all" {
+            sourceDir := filepath.Join("output", fmt.Sprint(time.Now().Year()))
             s.ChannelMessageSend(m.ChannelID, "Getting data for all processed events")
-            zipFile := filepath.Join(sourceDir, eventKey + ".zip")
-            zipToDiscord(s, m.ChannelID, sourceDir, zipFile)
+            zipPath := filepath.Join(sourceDir, eventKey + ".zip")
+            zipToDiscord(s, m.ChannelID, sourceDir, zipPath)
         } else {
-            found := false
+            // Define source directory for data (targets year directory)
+            sourceDir := filepath.Join("output", m.Content[i + 1:i + 5])
 
             // read directories from data storage dir
             dirs, err := os.ReadDir(sourceDir)
@@ -49,6 +50,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
             }
             
             // check if one of the directories matches the eventKey
+            found := false
             for _, dir := range dirs {
                 if dir.IsDir() && dir.Name() == eventKey {
                     found = true
@@ -70,8 +72,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 
-// zip source dir, send to discord in specified channel
-// TODO: docs
+// Function zipToDiscord takes a source directory, wraps it in a zip file called targetZipPath, and 
+// uploads it to a specified discord channel.
 func zipToDiscord(s *discordgo.Session, channelID string, sourceDir string, targetZipPath string) error {
     fmt.Println("Running Job...")
     err := utils.ZipDir(sourceDir, targetZipPath)
@@ -99,8 +101,8 @@ func zipToDiscord(s *discordgo.Session, channelID string, sourceDir string, targ
 }
 
 
-// helper function that uploads a file to discord to a specific channel
-// TODO: better docs
+// Function uploadToDiscord is a helper function that uploads a specified file
+// to a specified discord channel.
 func uploadToDiscord(s *discordgo.Session, channelID, filePath string) error {
     file, err := os.Open(filePath)
     if err != nil {
@@ -109,12 +111,13 @@ func uploadToDiscord(s *discordgo.Session, channelID, filePath string) error {
     defer file.Close()
 
 
-    // get files stats
+    // Get file stats
     stats, err := file.Stat()
     if err != nil {
         return err
     }
 
+    // Create message
     message := &discordgo.MessageSend{
         Files: []*discordgo.File{
             {

@@ -9,7 +9,14 @@ import (
 	"github.com/ptdewey/frc-scouting-database-v2/internal/api"
 )
 
-// TODO: docs
+
+// Function AnalyzeEvent provides a forward-facing wrapper around the
+// backend data fetching and analysis functions.
+// It takes in an event key and api key, pulls data from the desired
+// event, cleans and formats the data, then calculates summary statistics
+// and OPR values for each team participating at the event.
+// The final results are written to csv files in the output directory,
+// and a 2D string array of the final information is returned as well.
 func AnalyzeEvent(eventKey string, apiKey string) ([][]string, error) {
     // Fetch raw match data from api
     rm, err := api.EventMatchesList(eventKey, apiKey)
@@ -50,15 +57,12 @@ func AnalyzeEvent(eventKey string, apiKey string) ([][]string, error) {
     }
 
     // Extract match data for each team in event
-    // TODO: parallelize this loop
     for _, t := range ft {
         // Extract team data from overall match data
         tm, err := analysis.TeamMatches(fm, t.Key)
         if err != nil {
             fmt.Println("An error occurred extrating team data for team:", t.Key, err)
-            // TEST: potential point of failure here with no matches played for a team
             continue
-            // return nil, err
         }
 
         // Define filename for team data
