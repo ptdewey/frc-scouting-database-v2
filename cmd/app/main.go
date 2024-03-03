@@ -29,6 +29,13 @@ func main() {
         "2024vaash", "2024vabla",
         "2024caph", "2024miket", "2024paca", "2024flwp", "2024casj",
     }
+        for _, ek := range eventKeys {
+            _, err := app.AnalyzeEvent(ek, apiKey)
+            if err != nil {
+                fmt.Printf("Error analyzing event %s: %v\n", ek, err)
+                continue
+            }
+        }
 
     // Create new cron scheduler
     c := cron.New()

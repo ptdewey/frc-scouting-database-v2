@@ -8,7 +8,13 @@ import (
 
 // TestCalcEventOPR tests for correct output from CalcEventOPR.
 func TestCalcEventOPR(t *testing.T) {
-    out, err := CalcEventOPR(matches) 
+    // Extract alliances and scores for each match, for calculating opr and summary stats
+    a, teams, err := GetEventAlliances(matches)
+    if err != nil {
+        t.Fatalf("Error fetching team alliances.")
+    }
+
+    out, err := CalcEventOPR(matches, a, teams) 
     if err != nil {
         t.Fatalf("%v", err)
     }

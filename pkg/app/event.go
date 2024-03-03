@@ -56,6 +56,14 @@ func AnalyzeEvent(eventKey string, apiKey string) ([][]string, error) {
         return nil, err
     }
 
+    // Extract alliances and scores for each match, for calculating opr and summary stats
+    a, teams, err := analysis.GetEventAlliances(fm)
+    if err != nil {
+        return nil, err
+    }
+
+    var stats []analysis.SummaryStats
+
     // Extract match data for each team in event
     for _, t := range ft {
         // Extract team data from overall match data
@@ -74,10 +82,27 @@ func AnalyzeEvent(eventKey string, apiKey string) ([][]string, error) {
             fmt.Println("An error occurred writing team data to CSV:", err)
             return nil, err
         }
+
+        // Calculate team summary statistics
+        s, err := analysis.CalcTeamSummaryStats(a, t.Key)
+        if err != nil {
+            fmt.Println("An error occurred calculating summary stats for team:", t.Key, err)
+            return nil, err
+        }
+        stats = append(stats, s)
     }
 
+    // Write summary stats file
+    // TODO: sort first?
+    fname = filepath.Join(outputPath, eventKey + "_stats.csv")
+    _, err = analysis.SummaryStatsToCSV(stats, fname)
+    if err != nil {
+        fmt.Println("An error occurred writing summary stats:", err)
+        return nil, err
+    }
+    
     // Calculate OPR for event
-    opr, err := analysis.CalcEventOPR(fm)
+    opr, err := analysis.CalcEventOPR(fm, a, teams)
     if err != nil {
         fmt.Println("An error occurred calculating OPRs:", err)
         return nil, err
