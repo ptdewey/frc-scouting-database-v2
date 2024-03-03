@@ -5,11 +5,10 @@ WORKDIR /app
 COPY ./go.mod .
 RUN go mod download
 
+RUN apk --no-cache add tzdata
+ENV TZ=America/New_York
+
 COPY . .
-# COPY ./cmd/app /app/cmd/app
-# COPY ./config/app.env /app/config/app.env
-# COPY ./pkg/app /app/pkg/app
-# COPY ./internal /app/internal
 
 ARG UID
 ARG GID
