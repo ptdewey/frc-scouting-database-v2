@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/ptdewey/frc-scouting-database-v2/internal/analysis"
 	"github.com/ptdewey/frc-scouting-database-v2/internal/api"
 )
-
 
 // Function AnalyzeEvent provides a forward-facing wrapper around the
 // backend data fetching and analysis functions.
@@ -118,4 +118,72 @@ func AnalyzeEvent(eventKey string, apiKey string) ([][]string, error) {
     }
 
     return out, nil
+}
+
+
+// Function AnalyzeActiveEvents pulls TBA api data for all events happening between
+// the specified start and end dates, and calls AnalyzeEvent on them.
+// This results in the ouput directory being populated with cleaned data and event
+// stats for each event in the time range.
+// Takes in two strings for the start and end date, and a third string containing
+// a valid TBA api key. Can return an error.
+func AnalyzeActiveEvents(startDate string, endDate string, apiKey string) error {
+    year := string([]rune(startDate)[0:4])
+
+    // Get event list
+    re, err := api.EventList(year, apiKey)
+    if err != nil {
+        return err
+    }
+
+    // Format events list
+    events, err := api.FormatEventList(re)
+    if err != nil {
+        return err
+    }
+
+    // Reformat time strings to date type
+    timeFmt := "2006-01-02"
+    start, err := time.Parse(timeFmt, startDate)
+    if err != nil {
+        return err
+    }
+    end, err := time.Parse(timeFmt, endDate)
+    if err != nil {
+        return err
+    }
+
+    // Iterate through events, checking if event is considered 'active'
+    for _, e := range events {
+        // Convert event start and end dates to time type
+        evStart, err := time.Parse(timeFmt, e.StartDate)
+        if err != nil {
+            return err
+        }
+        evEnd, err := time.Parse(timeFmt, e.EndDate)
+        if err != nil {
+            return err
+        }
+        
+        // Compare start and end dates
+        if (start.After(evStart) || start.Equal(evStart)) && (end.Before(evEnd) || end.Equal(evEnd)) {
+            AnalyzeEvent(e.Key, apiKey)
+        }
+    }
+
+    return nil
+}
+
+
+// Function AnalyzeActiveEvents pulls TBA api data for all events happening 
+// currently, and calls AnalyzeEvent on them to extract insights.
+// Takes in a string containing the TBA api key and can return an error.
+func AnalyzeCurrentEvents(apiKey string) error {
+    t := time.Now().Format("2006-01-02")
+    err := AnalyzeActiveEvents(t, t, apiKey)
+    if err != nil {
+        return err
+    }
+
+    return nil
 }

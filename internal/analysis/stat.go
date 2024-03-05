@@ -18,7 +18,10 @@ type SummaryStats struct {
 }
 
 
-// TODO: docs
+// Function CalcTeamSummaryStats calculates summary statistics (mean, max, median) for
+// each team at an event. It takes in an AllianceInfo object from alliance_utils.go
+// and a string definining which team to evaluate statistics for.
+// It returns a SummaryStats object and an error.
 func CalcTeamSummaryStats(a AllianceInfo, teamKey string) (SummaryStats, error) {
     // Initialize output variable.
     var out SummaryStats
@@ -46,7 +49,9 @@ func CalcTeamSummaryStats(a AllianceInfo, teamKey string) (SummaryStats, error) 
 }
 
 
-// TODO: docs
+// Function SummaryStatsToCSV converts an array of SummaryStats to a 2D string
+// array and writes the output to a csv file. It takes in a SummaryStats slice
+// and a string for the filename and returns a 2D string slice and an error.
 func SummaryStatsToCSV(stats []SummaryStats, filename string) ([][]string, error) {
     // create and open new file
     f, err := os.Create(filename)
@@ -81,7 +86,9 @@ func SummaryStatsToCSV(stats []SummaryStats, filename string) ([][]string, error
     return out, nil
 }
 
-// TODO: docs
+
+// Function SummaryStatsToCSVRow converts a SummaryStats object to a csv row string.
+// It takes in a SummaryStats object and outputs a string slice.
 func SummaryStatsToCSVRow(s SummaryStats) []string {
     var out []string
 

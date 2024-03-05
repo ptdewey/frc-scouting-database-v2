@@ -23,36 +23,14 @@ func main() {
     }
     apiKey := os.Getenv("API_KEY")
 
-    // Define events to fetch data from
-    // TODO: define as all current events (use EventList and dates)
-    eventKeys := []string {
-        "2024vaash", "2024vabla",
-        "2024caph", "2024miket", "2024paca", "2024flwp", "2024casj",
-    }
-        for _, ek := range eventKeys {
-            _, err := app.AnalyzeEvent(ek, apiKey)
-            if err != nil {
-                fmt.Printf("Error analyzing event %s: %v\n", ek, err)
-                continue
-            }
-        }
-
     // Create new cron scheduler
     c := cron.New()
 
     // Currently running every 5 minutes
-    c.AddFunc("*/5 8-22 * * 5,6,0", func(){
+    // c.AddFunc("*/5 8-22 * * 5,6,0", func(){
+    c.AddFunc("*/5 8-22 * * *", func(){
         fmt.Println("Running scheduled job...")
-
-        // Get event data for specified event(s)
-        // TODO: parallelize this?
-        for _, ek := range eventKeys {
-            _, err := app.AnalyzeEvent(ek, apiKey)
-            if err != nil {
-                fmt.Printf("Error analyzing event %s: %v\n", ek, err)
-                continue
-            }
-        }
+        runAnalyzer(apiKey)
     })
 
     // Start cron scheduler
@@ -65,4 +43,30 @@ func main() {
 
     // stop cron scheduler
     c.Stop()
+}
+
+
+// Function runAnalyzer is a helper function that is called by the cron scheduler.
+// It determines which events be evaluated.
+func runAnalyzer(apiKey string) {
+    // Manually specify events to fetch data for
+    eventKeys := []string {
+        "2024vagle",
+    }
+
+    // Pull statistics for currently active events
+    err := app.AnalyzeCurrentEvents(apiKey)
+    if err != nil {
+        return 
+    }
+
+    // Get event data for specified event(s)
+    for _, ek := range eventKeys {
+        _, err := app.AnalyzeEvent(ek, apiKey)
+        if err != nil {
+            fmt.Printf("Error analyzing event %s: %v\n", ek, err)
+            continue
+        }
+    }
+
 }

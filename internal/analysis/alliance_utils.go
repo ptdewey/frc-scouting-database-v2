@@ -9,7 +9,6 @@ import (
 )
 
 
-// TODO: docs
 type AllianceInfo struct {
     Alliances [][]string
     Scores []float64
@@ -19,7 +18,10 @@ type AllianceInfo struct {
 }
 
 
-// TODO: docs
+// Function GetEventAlliances is a helper function for statistical analysis functions
+// that extracts team and score info from match breakdowns.
+// It takes in a api.Match slice and outputs an AllianceInfo object, a string slice
+// containing all unique team keys for an event, and an error.
 func GetEventAlliances(matches []api.Match) (AllianceInfo, []string, error) {
     // Initialize container variables
     var out AllianceInfo
@@ -62,7 +64,10 @@ func GetEventAlliances(matches []api.Match) (AllianceInfo, []string, error) {
 }
 
 
-// TODO: docs
+// Function extractTeamAlliances is a helper function that extracts the indices
+// within the AllianceInfo table in which a team key occurs (team plays in a match).
+// It takes in an AllianceInfo object and a string teamKey.
+// It ouputs an integer slice and an error.
 func extractTeamAlliances(alliances AllianceInfo, teamKey string) ([]int, error) {
     var out []int
     for i, a := range alliances.Alliances {
