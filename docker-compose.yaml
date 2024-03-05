@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  # event analysis app
+  app:
+    build: 
+      context: .
+      dockerfile: ./cmd/app/Dockerfile
+      args:
+        UID: "1000"
+        GID: "1000"
+    volumes:
+      - ./output:/app/output
+
+  # exporter bot
+  bot:
+    build: 
+      context: .
+      dockerfile: ./cmd/bot/Dockerfile
+    volumes:
+      - ./output:/bot/output
+
+# Define output directory as volume
+volumes:
+  output:
