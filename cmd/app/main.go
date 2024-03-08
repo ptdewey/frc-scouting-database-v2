@@ -27,8 +27,7 @@ func main() {
     c := cron.New()
 
     // Currently running every 5 minutes
-    // c.AddFunc("*/5 8-22 * * 5,6,0", func(){
-    c.AddFunc("*/5 8-22 * * *", func(){
+    c.AddFunc("*/5 6-22 * * *", func(){
         fmt.Println("Running scheduled job...")
         runAnalyzer(apiKey)
     })
@@ -51,7 +50,7 @@ func main() {
 func runAnalyzer(apiKey string) {
     // Manually specify events to fetch data for
     eventKeys := []string {
-        "2024vagle",
+        // "2024vagle",
     }
 
     // Pull statistics for currently active events

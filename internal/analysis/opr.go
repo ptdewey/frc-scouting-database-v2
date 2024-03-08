@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"os"
 	"sort"
@@ -32,6 +33,9 @@ func CalcEventOPR(matches []api.Match, a AllianceInfo, teams []string) ([]OPR, e
 
     // Set number of rows and columns in matrix.
     r, c := len(a.Scores), len(teams)
+    if r == 0 || c == 0 {
+        return nil, errors.New("Invalid matrix size arguments.")
+    }
 
     // Create data array for matrix
     data := make([]float64, r * c)
