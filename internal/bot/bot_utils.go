@@ -20,6 +20,15 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
         return
     }
 
+    // Check if message is help command
+    if m.Content == ":Help" {
+        s.ChannelMessageSend(m.ChannelID,
+            "To get data for an event send ':EventsGet event_key' in a channel and replace event_key with a valid event key." +
+            "(i.e. ':EventsGet 2024vagle' for the 2024 Glen Allen event)\n" +
+            "To get data for all retrieved events from the current year run ':EventsGet all'.",
+        )
+    }
+
     // check if correct prefix was used
     if strings.HasPrefix(m.Content, ":EventsGet") {
         // slice message from first space to end (extract event key)
