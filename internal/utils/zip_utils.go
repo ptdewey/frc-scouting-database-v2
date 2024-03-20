@@ -6,6 +6,7 @@ import (
     "io"
 	"os"
 	"path/filepath"
+    "strings"
 )
 
 // create zip file from directory
@@ -53,7 +54,12 @@ func ZipDir(source string, target string) error {
             return err
         }
 
+        // make file paths relative
         header.Name = filepath.ToSlash(path[len(source):])
+
+        // remove any leading slashes, which seem to cause issues opening zip on windows
+        header.Name = strings.TrimPrefix(header.Name, "/")
+
         if info.IsDir() {
             header.Name += "/"
         } else {
