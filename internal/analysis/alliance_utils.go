@@ -40,6 +40,7 @@ func GetEventAlliances(matches []api.Match) (AllianceInfo, []string, error) {
         }
 
         // Remove unplayed matches and playoff matches
+        // TODO: allow sf, f matches in calculation?
         if m.ScoreBreakdown.Blue.TotalPoints == -1 || m.CompLevel != "qm" {
             continue
         }

@@ -158,11 +158,12 @@ func OPRToCSVRow(o OPR) []string {
     // Append opr data to output row
     out = append(out,
         o.TeamKey,
+        // TODO: change sprint to strconv.FormatFloat to allow rounding
         fmt.Sprint(o.OPR),
         fmt.Sprint(o.AutoOPR),
         fmt.Sprint(o.TeleopOPR),
         fmt.Sprint(o.RPOPR),
-    )
+        )
 
     return out
 }

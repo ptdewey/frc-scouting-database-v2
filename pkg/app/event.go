@@ -108,6 +108,9 @@ func AnalyzeEvent(eventKey string, apiKey string) ([][]string, error) {
         return nil, err
     }
 
+    // TODO: combine opr and stats into one file?
+    // TODO: aggregate opr tables here to avoid unecessary file reads?
+
     // Write OPR data to csv
     fname = filepath.Join(outputPath, eventKey + "_opr.csv")
     fmt.Println(fname)
