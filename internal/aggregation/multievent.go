@@ -17,8 +17,10 @@ type SeasonOPR struct {
 	RPOPRs      []float64
 }
 
-// TODO: docs
-func combineEventOPRs(oprs []analysis.OPR) map[string]*SeasonOPR {
+// Function CombineEventOPRs takes in a season's worth of OPR data,
+// and outputs a map of strings (team keys) to SeasonOPR objects containing
+// all opr data for each team in a given season.
+func CombineEventOPRs(oprs []analysis.OPR) map[string]*SeasonOPR {
     // TODO: might need to check if event key is not included already to avoid rewriting every time
     // - could maybe pass in opr map mapped to event key to make this easier
     // - this could also potentially also allow for keeping track of event weeks
@@ -41,6 +43,7 @@ func combineEventOPRs(oprs []analysis.OPR) map[string]*SeasonOPR {
     return seasonOPRs
 }
 
+
 // Function calcMaxEvents calculates the max number of events played by a
 // team over the course of a given season.
 // It takes in a string to SeasonOPR map and returns an integer.
@@ -56,8 +59,9 @@ func calcMaxEvents(seasonOPRs map[string]*SeasonOPR) int {
 }
 
 
+// TODO: docs
 // TODO: output to CSV
-func seasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, year string) error {
+func SeasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, year string) error {
     fp := filepath.Join("output", year, year + "_opr.csv")
     f, err := os.Create(fp)
     if err != nil {
@@ -78,7 +82,7 @@ func seasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, year string) error {
     }
     w.Write(header)
 
-    // iterate throug map of team season data
+    // iterate through map of team season data
     for _, ts := range seasonOPRs {
         row := []string{ ts.TeamKey }
         // calculate maximums

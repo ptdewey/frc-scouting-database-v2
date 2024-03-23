@@ -60,6 +60,7 @@ func ZipDir(source string, target string) error {
         // remove any leading slashes, which seem to cause issues opening zip on windows
         header.Name = strings.TrimPrefix(header.Name, "/")
 
+        // append slash for directories
         if info.IsDir() {
             header.Name += "/"
         } else {
@@ -71,6 +72,7 @@ func ZipDir(source string, target string) error {
             return err
         }
 
+        // write files to zip
         if !info.IsDir() {
             file, err := os.Open(path)
             if err != nil {

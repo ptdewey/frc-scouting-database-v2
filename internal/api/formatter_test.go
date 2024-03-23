@@ -4,7 +4,7 @@ import "testing"
 
 // TestEventList calls api.EventList and api.FormatEventList checking for correct output.
 func TestFormatEventList(t *testing.T) {
-    year := "2024"
+    year := "2023"
     out, err := EventList(year, apiKey)
     if err != nil {
         t.Fatalf(`EventList(year, apiKey) = %q. Error: %v`, out, err)
@@ -17,10 +17,10 @@ func TestFormatEventList(t *testing.T) {
     }
     
     // event index in output array
-    ei := 171
+    ei := 285
 
     // test correct event key
-    ek := "2024vagle"
+    ek := "2023vagle"
     if events[ei].Key != ek {
         t.Fatalf("Event at index %d did not match key %s %s.", ei, ek, events[ei].Key)
     }
@@ -38,13 +38,13 @@ func TestFormatEventList(t *testing.T) {
     }
 
     // test for correct start date
-    sd := "2024-03-15"
+    sd := "2023-03-24"
     if events[ei].StartDate != sd {
         t.Fatalf("Event at index %d had mismatched start date %s %s.", ei, sd, events[ei].StartDate)
     }
 
     // test for correct end date
-    ed := "2024-03-17"
+    ed := "2023-03-26"
     if events[ei].EndDate != ed {
         t.Fatalf("Event at index %d had mismatched end date %s %s.", ei, ed, events[ei].EndDate)
     }
