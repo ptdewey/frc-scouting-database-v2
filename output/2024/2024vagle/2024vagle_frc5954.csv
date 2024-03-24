@@ -1,0 +1,13 @@
+key,match_num,comp_level,b1,b2,b3,r1,r2,r3,b_score,r_score,b_auto_score,r_auto_score,b_tele_score,r_tele_score,b_adj_score,r_adj_score,b_rp,r_rp,winning_alliance
+2024vagle_qm10,10,qm,frc5954,frc1599,frc404,frc3136,frc3361,frc9709,16,53,2,24,14,29,0,0,0,3,red
+2024vagle_qm15,15,qm,frc404,frc5338,frc346,frc3136,frc5954,frc977,42,51,22,14,20,37,0,0,0,2,red
+2024vagle_qm20,20,qm,frc5954,frc6802,frc2998,frc1599,frc6194,frc5338,32,57,9,17,23,35,0,0,0,3,red
+2024vagle_qm24,24,qm,frc2068,frc1610,frc6194,frc2186,frc4472,frc5954,30,30,9,17,7,11,0,0,1,1,
+2024vagle_qm28,28,qm,frc5954,frc540,frc9709,frc2186,frc3361,frc617,27,31,14,17,13,14,0,0,0,2,red
+2024vagle_qm33,33,qm,frc9709,frc977,frc2068,frc346,frc1522,frc5954,49,43,27,21,22,22,0,0,2,0,blue
+2024vagle_qm39,39,qm,frc3939,frc5954,frc5804,frc2998,frc404,frc6882,38,16,9,4,24,2,0,0,2,1,blue
+2024vagle_qm45,45,qm,frc617,frc1086,frc346,frc5724,frc1262,frc5954,59,50,17,9,42,41,0,0,3,0,blue
+2024vagle_qm48,48,qm,frc2068,frc1086,frc5954,frc1610,frc346,frc540,45,63,14,22,29,39,0,0,1,4,red
+2024vagle_qm5,5,qm,frc4821,frc1522,frc404,frc2890,frc5954,frc1610,31,37,9,9,17,26,0,0,0,2,red
+2024vagle_qm54,54,qm,frc5954,frc4821,frc2988,frc2186,frc3136,frc5724,31,68,11,24,18,44,0,0,0,4,red
+2024vagle_qm59,59,qm,frc3361,frc5954,frc6882,frc6802,frc1262,frc4821,42,48,19,19,23,29,0,0,0,2,red

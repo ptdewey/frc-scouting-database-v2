@@ -22,3 +22,7 @@ go.work
 
 # Environment variable files
 *.env
+
+# Output files
+output/
+*example_data/
