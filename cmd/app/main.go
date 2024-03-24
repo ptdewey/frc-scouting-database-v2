@@ -53,19 +53,27 @@ func runAnalyzer(apiKey string) {
         // "2024vagle",
     }
 
-    // Pull statistics for currently active events
-    err := app.AnalyzeCurrentEvents(apiKey)
-    if err != nil {
-        return 
-    }
-
     // Get event data for specified event(s)
     for _, ek := range eventKeys {
         _, err := app.AnalyzeEvent(ek, apiKey)
         if err != nil {
             fmt.Printf("Error analyzing event %s: %v\n", ek, err)
             continue
+
         }
     }
 
+    // Pull statistics for currently active events
+    year, err := app.AnalyzeCurrentEvents(apiKey)
+    if err != nil {
+        fmt.Println("Error analyzing current events.")
+        return 
+    }
+
+    // Aggregate opr data for given year
+    err = app.AggregateEvents(year)
+    if err != nil {
+        fmt.Println("Error aggregating events.")
+        return 
+    }
 }

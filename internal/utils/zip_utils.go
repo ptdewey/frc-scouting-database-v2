@@ -39,6 +39,8 @@ func ZipDir(source string, target string) error {
     defer archive.Close()
 
     // walk through all files/dirs in source dir
+    // FIX: error checking on this function?
+    // TODO: also change to using filepath.WalkDir which is more efficient
     filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
         if err != nil {
             return err
@@ -60,6 +62,7 @@ func ZipDir(source string, target string) error {
         // remove any leading slashes, which seem to cause issues opening zip on windows
         header.Name = strings.TrimPrefix(header.Name, "/")
 
+        // append slash for directories
         if info.IsDir() {
             header.Name += "/"
         } else {
@@ -71,6 +74,7 @@ func ZipDir(source string, target string) error {
             return err
         }
 
+        // write files to zip
         if !info.IsDir() {
             file, err := os.Open(path)
             if err != nil {

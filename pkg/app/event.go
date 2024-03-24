@@ -108,6 +108,9 @@ func AnalyzeEvent(eventKey string, apiKey string) ([][]string, error) {
         return nil, err
     }
 
+    // TODO: combine opr and stats into one file?
+    // TODO: aggregate opr tables here to avoid unecessary file reads?
+
     // Write OPR data to csv
     fname = filepath.Join(outputPath, eventKey + "_opr.csv")
     fmt.Println(fname)
@@ -127,30 +130,30 @@ func AnalyzeEvent(eventKey string, apiKey string) ([][]string, error) {
 // stats for each event in the time range.
 // Takes in two strings for the start and end date, and a third string containing
 // a valid TBA api key. Can return an error.
-func AnalyzeActiveEvents(startDate string, endDate string, apiKey string) error {
+func AnalyzeActiveEvents(startDate string, endDate string, apiKey string) (string, error) {
     year := string([]rune(startDate)[0:4])
 
     // Get event list
     re, err := api.EventList(year, apiKey)
     if err != nil {
-        return err
+        return "", err
     }
 
     // Format events list
     events, err := api.FormatEventList(re)
     if err != nil {
-        return err
+        return "", err
     }
 
     // Reformat time strings to date type
     timeFmt := "2006-01-02"
     start, err := time.Parse(timeFmt, startDate)
     if err != nil {
-        return err
+        return "", err
     }
     end, err := time.Parse(timeFmt, endDate)
     if err != nil {
-        return err
+        return "", err
     }
 
     // Iterate through events, checking if event is considered 'active'
@@ -158,32 +161,32 @@ func AnalyzeActiveEvents(startDate string, endDate string, apiKey string) error 
         // Convert event start and end dates to time type
         evStart, err := time.Parse(timeFmt, e.StartDate)
         if err != nil {
-            return err
+            return "", err
         }
         evEnd, err := time.Parse(timeFmt, e.EndDate)
         if err != nil {
-            return err
+            return "", err
         }
         
         // Compare start and end dates
-        if (start.After(evStart) || start.Equal(evStart)) && (end.Before(evEnd) || end.Equal(evEnd)) {
+        if (evStart.After(start) || start.Equal(evStart)) && (evEnd.Before(end) || end.Equal(evEnd)) {
             AnalyzeEvent(e.Key, apiKey)
         }
     }
 
-    return nil
+    return year, nil
 }
 
 
 // Function AnalyzeActiveEvents pulls TBA api data for all events happening 
 // currently, and calls AnalyzeEvent on them to extract insights.
 // Takes in a string containing the TBA api key and can return an error.
-func AnalyzeCurrentEvents(apiKey string) error {
+func AnalyzeCurrentEvents(apiKey string) (string, error) {
     t := time.Now().Format("2006-01-02")
-    err := AnalyzeActiveEvents(t, t, apiKey)
+    year, err := AnalyzeActiveEvents(t, t, apiKey)
     if err != nil {
-        return err
+        return year, err
     }
 
-    return nil
+    return year, nil
 }
