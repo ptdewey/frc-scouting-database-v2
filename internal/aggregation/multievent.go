@@ -101,7 +101,7 @@ func SeasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, outputPath, year string) e
     header := []string{ "team_key", "max_opr", "max_auto_opr", "max_tele_opr", "max_rp_opr" }
     for i := 1; i <= maxEvents; i++ {
         header = append( header, "opr_" + strconv.Itoa(i), "auto_opr_" + strconv.Itoa(i),
-            "tele_opr_" + strconv.Itoa(i) + "rp_opr_" + strconv.Itoa(i)) 
+            "tele_opr_" + strconv.Itoa(i), "rp_opr_" + strconv.Itoa(i)) 
     }
     w.Write(header)
 
@@ -113,18 +113,18 @@ func SeasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, outputPath, year string) e
         for i := 0; i < maxEvents; i++ {
             if i < len(ts.OPRs) {
                 mo = max(ts.OPRs[i], mo)
-                ma = max(ts.OPRs[i], ma)
-                mt = max(ts.OPRs[i], mt)
-                mr = max(ts.OPRs[i], mr)
+                ma = max(ts.AutoOPRs[i], ma)
+                mt = max(ts.TeleopOPRs[i], mt)
+                mr = max(ts.RPOPRs[i], mr)
+                row = append(row,  
+                    strconv.FormatFloat(mo, 'f', -1, 64),
+                    strconv.FormatFloat(ma, 'f', -1, 64), 
+                    strconv.FormatFloat(mt, 'f', -1, 64),
+                    strconv.FormatFloat(mr, 'f', -1, 64))
             } else {
-                break
+                row = append(row, "", "", "", "")
             }
         }
-        row = append(row,  
-            strconv.FormatFloat(mo, 'f', -1, 64),
-            strconv.FormatFloat(ma, 'f', -1, 64), 
-            strconv.FormatFloat(mt, 'f', -1, 64),
-            strconv.FormatFloat(mr, 'f', -1, 64))
 
         // add all opr values to row
         for i := 0; i < maxEvents; i++ {

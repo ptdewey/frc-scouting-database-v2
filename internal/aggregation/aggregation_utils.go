@@ -2,13 +2,13 @@ package aggregation
 
 import (
 	"encoding/csv"
+    "fmt"
 	"os"
 	"path/filepath"
 	"strconv"
 
 	"github.com/ptdewey/frc-scouting-database-v2/internal/analysis"
 )
-
 
 // combineOPRFiles aggregates OPR data from all event CSV files within a specific year's directory.
 // It navigates through each subdirectory of outputPath/year, expecting each to contain an event-specific "_opr.csv" file.
@@ -26,13 +26,14 @@ func combineOPRFiles(outputPath string, year string) ([]analysis.OPR, error) {
 
         // skip non-directory entries
         if !d.IsDir() || d.Name() == year {
-            return err
+            return nil
         }
         
         // call readEventOPR on each file in the directory
         opr, err := readEventOPR(d.Name(), outputPath)
         if err != nil {
-            return err
+            fmt.Println("Error reading contents", d.Name(), ":", err)
+            return nil
         }
         out = append(out, opr...)
         

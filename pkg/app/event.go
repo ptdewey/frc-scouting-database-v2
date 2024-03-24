@@ -136,24 +136,24 @@ func AnalyzeActiveEvents(startDate string, endDate string, apiKey string) (strin
     // Get event list
     re, err := api.EventList(year, apiKey)
     if err != nil {
-        return year, err
+        return "", err
     }
 
     // Format events list
     events, err := api.FormatEventList(re)
     if err != nil {
-        return year, err
+        return "", err
     }
 
     // Reformat time strings to date type
     timeFmt := "2006-01-02"
     start, err := time.Parse(timeFmt, startDate)
     if err != nil {
-        return year, err
+        return "", err
     }
     end, err := time.Parse(timeFmt, endDate)
     if err != nil {
-        return year, err
+        return "", err
     }
 
     // Iterate through events, checking if event is considered 'active'
@@ -161,15 +161,15 @@ func AnalyzeActiveEvents(startDate string, endDate string, apiKey string) (strin
         // Convert event start and end dates to time type
         evStart, err := time.Parse(timeFmt, e.StartDate)
         if err != nil {
-            return year, err
+            return "", err
         }
         evEnd, err := time.Parse(timeFmt, e.EndDate)
         if err != nil {
-            return year, err
+            return "", err
         }
         
         // Compare start and end dates
-        if (start.After(evStart) || start.Equal(evStart)) && (end.Before(evEnd) || end.Equal(evEnd)) {
+        if (evStart.After(start) || start.Equal(evStart)) && (evEnd.Before(end) || end.Equal(evEnd)) {
             AnalyzeEvent(e.Key, apiKey)
         }
     }
