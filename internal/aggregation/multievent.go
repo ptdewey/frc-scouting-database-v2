@@ -116,15 +116,15 @@ func SeasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, outputPath, year string) e
                 ma = max(ts.AutoOPRs[i], ma)
                 mt = max(ts.TeleopOPRs[i], mt)
                 mr = max(ts.RPOPRs[i], mr)
-                row = append(row,  
-                    strconv.FormatFloat(mo, 'f', -1, 64),
-                    strconv.FormatFloat(ma, 'f', -1, 64), 
-                    strconv.FormatFloat(mt, 'f', -1, 64),
-                    strconv.FormatFloat(mr, 'f', -1, 64))
             } else {
-                row = append(row, "", "", "", "")
+                break
             }
         }
+        row = append(row,  
+            strconv.FormatFloat(mo, 'f', -1, 64),
+            strconv.FormatFloat(ma, 'f', -1, 64), 
+            strconv.FormatFloat(mt, 'f', -1, 64),
+            strconv.FormatFloat(mr, 'f', -1, 64))
 
         // add all opr values to row
         for i := 0; i < maxEvents; i++ {
@@ -136,7 +136,7 @@ func SeasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, outputPath, year string) e
                     strconv.FormatFloat(ts.RPOPRs[i], 'f', -1, 64))
             } else {
                 row = append(row, "", "", "", "")
-                break
+                // break
             }
         }
         w.Write(row)
