@@ -6,13 +6,16 @@ import (
 	"github.com/ptdewey/frc-scouting-database-v2/internal/analysis"
 )
 
+
 // Initialize variables for testing
 var(
     o analysis.OPR
     oprs []analysis.OPR
     s SeasonOPR
     omap map[string]*SeasonOPR
+    outputPath string = "../../output"
 )
+
 
 // Set up for tests
 func init() {
@@ -40,6 +43,20 @@ func init() {
     } 
     omap = CombineEventOPRs(oprs)
 }
+
+
+// Test function combineOPRFiles for correct behavior
+func TestCombineOPRFiles(t *testing.T) {
+    year := "2024"
+    opr, err := combineOPRFiles(outputPath, year) 
+    if err != nil {
+        t.Fatalf("Error occured combining OPR files: %v", err)
+    }
+    if len(opr) == 0 {
+        t.Fatalf("Error: Combined OPRs result has length 0.")
+    }
+}
+
 
 // Test multievent functions for correct output
 func TestMultiEvent(t *testing.T) {
@@ -71,10 +88,10 @@ func TestMultiEvent(t *testing.T) {
     }
 
     // test SeasonOPRtoCSV
-    // TODO: get this working (pathing issues when not run from project root)
-    // err := SeasonOPRtoCSV(omap, "2024")
+    // TEST: verify rewriting to file works as expected
+    // TODO: remove this test since it can overwrite file
+    // err := SeasonOPRtoCSV(omap, outputPath, "2024")
     // if err != nil {
     //     t.Fatalf("Error: %v", err)
     // }
-    
 }

@@ -9,12 +9,32 @@ import (
 	"github.com/ptdewey/frc-scouting-database-v2/internal/analysis"
 )
 
+
 type SeasonOPR struct {
 	TeamKey     string
 	OPRs        []float64
 	AutoOPRs    []float64
 	TeleopOPRs  []float64
 	RPOPRs      []float64
+}
+
+
+// ReadAndCombineEventOPRs is a wrapper function around CombineEventOPRs, focusing on reading OPR CSV files
+// from a specified outputPath and year, rather than requiring pre-read input data. It first invokes combineOPRFiles
+// to gather and combine OPR data from all event-specific "_opr.csv" files located within the outputPath/year directory.
+// This data is then passed to CombineEventOPRs, which aggregates the individual event OPRs into a season-wide OPR map,
+// where each key is a team key, and the value is a pointer to a SeasonOPR structure. This approach abstracts away the file
+// reading process, allowing direct creation of a season-wide OPR map from raw CSV files for a given year.
+func ReadAndCombineEventOPRs(outputPath string, year string) (map[string]*SeasonOPR, error) {
+    // Read all opr csv files from output directory for a given year
+    oprs, err := combineOPRFiles(outputPath, year)
+    if err != nil {
+        return nil, err
+    }
+    
+    // combine event oprs into output map object
+    out := CombineEventOPRs(oprs)
+    return out, nil 
 }
 
 // Function CombineEventOPRs takes in a season's worth of OPR data,
@@ -24,6 +44,7 @@ func CombineEventOPRs(oprs []analysis.OPR) map[string]*SeasonOPR {
     // TODO: might need to check if event key is not included already to avoid rewriting every time
     // - could maybe pass in opr map mapped to event key to make this easier
     // - this could also potentially also allow for keeping track of event weeks
+    // - could be complex for in-progress events
     // TODO: might also need to take in map as param to allow updating it
     seasonOPRs := make(map[string]*SeasonOPR)
     // iterate over all opr event data
@@ -59,10 +80,12 @@ func calcMaxEvents(seasonOPRs map[string]*SeasonOPR) int {
 }
 
 
-// TODO: docs
-// TODO: output to CSV
-func SeasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, year string) error {
-    fp := filepath.Join("output", year, year + "_opr.csv")
+// SeasonOPRtoCSV writes a CSV file named "<year>_opr.csv" under the specified outputPath/year directory.
+// It takes a map of team OPR data for a season, an output directory path, and the competition year as arguments.
+// The CSV includes team keys, max OPRs, max auto, teleop, and RP OPRs, plus individual event OPRs for each team.
+// Returns an error if the file cannot be created or written to.
+func SeasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, outputPath, year string) error {
+    fp := filepath.Join(outputPath, year, year + "_opr.csv")
     f, err := os.Create(fp)
     if err != nil {
         return err
@@ -88,10 +111,14 @@ func SeasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, year string) error {
         // calculate maximums
         mo, ma, mt, mr := -100.0, -100.0, -100.0, -100.0
         for i := 0; i < maxEvents; i++ {
-            mo = max(ts.OPRs[i], mo)
-            ma = max(ts.OPRs[i], ma)
-            mt = max(ts.OPRs[i], mt)
-            mr = max(ts.OPRs[i], mr)
+            if i < len(ts.OPRs) {
+                mo = max(ts.OPRs[i], mo)
+                ma = max(ts.OPRs[i], ma)
+                mt = max(ts.OPRs[i], mt)
+                mr = max(ts.OPRs[i], mr)
+            } else {
+                break
+            }
         }
         row = append(row,  
             strconv.FormatFloat(mo, 'f', -1, 64),
@@ -109,7 +136,7 @@ func SeasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, year string) error {
                     strconv.FormatFloat(ts.RPOPRs[i], 'f', -1, 64))
             } else {
                 row = append(row, "", "", "", "")
-                break // TODO: this is ok right?
+                break
             }
         }
         w.Write(row)

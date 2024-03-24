@@ -39,6 +39,8 @@ func ZipDir(source string, target string) error {
     defer archive.Close()
 
     // walk through all files/dirs in source dir
+    // FIX: error checking on this function?
+    // TODO: also change to using filepath.WalkDir which is more efficient
     filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
         if err != nil {
             return err
