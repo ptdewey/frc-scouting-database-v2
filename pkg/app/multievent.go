@@ -19,11 +19,6 @@ func AggregateEvents(year string) error {
         return err
     }
     
-    // check for correct map size
-    // if len(omap) == 0 {
-    //     return errors.New("Error: OPR map is an invalid length.")
-    // }
-
     // write results to CSV file
     err = aggregation.SeasonOPRtoCSV(omap, outputPath, year)
     if err != nil {

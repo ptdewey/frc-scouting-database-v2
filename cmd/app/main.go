@@ -23,6 +23,8 @@ func main() {
     }
     apiKey := os.Getenv("API_KEY")
 
+    runAnalyzer(apiKey)
+
     // Create new cron scheduler
     c := cron.New()
 

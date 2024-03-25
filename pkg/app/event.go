@@ -170,6 +170,7 @@ func AnalyzeActiveEvents(startDate string, endDate string, apiKey string) (strin
         
         // Compare start and end dates
         if (evStart.After(start) || start.Equal(evStart)) && (evEnd.Before(end) || end.Equal(evEnd)) {
+            fmt.Println("Analyzing events:", e.Key)
             AnalyzeEvent(e.Key, apiKey)
         }
     }
@@ -182,8 +183,10 @@ func AnalyzeActiveEvents(startDate string, endDate string, apiKey string) (strin
 // currently, and calls AnalyzeEvent on them to extract insights.
 // Takes in a string containing the TBA api key and can return an error.
 func AnalyzeCurrentEvents(apiKey string) (string, error) {
-    t := time.Now().Format("2006-01-02")
-    year, err := AnalyzeActiveEvents(t, t, apiKey)
+    // get start and end dates (-3 or +3 days from current date)
+    start := time.Now().AddDate(0, 0, -3).Format("2006-01-02")
+    end := time.Now().AddDate(0, 0, 3).Format("2006-01-02")
+    year, err := AnalyzeActiveEvents(start, end, apiKey)
     if err != nil {
         return year, err
     }
