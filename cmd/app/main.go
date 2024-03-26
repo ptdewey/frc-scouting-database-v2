@@ -29,7 +29,7 @@ func main() {
     c := cron.New()
 
     // Currently running every 5 minutes
-    c.AddFunc("*/5 6-22 * * *", func(){
+    c.AddFunc("*/10 8-20 * * *", func(){
         fmt.Println("Running scheduled job...")
         runAnalyzer(apiKey)
     })

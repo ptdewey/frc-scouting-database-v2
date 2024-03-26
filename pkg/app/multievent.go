@@ -1,8 +1,6 @@
 package app
 
-import (
-	"github.com/ptdewey/frc-scouting-database-v2/internal/aggregation"
-)
+import "github.com/ptdewey/frc-scouting-database-v2/internal/aggregation"
 
 // AggregateEvents aggregates OPR data for all events within a specified year into a single CSV file.
 // It serves as a high-level function that orchestrates the process of reading event-specific OPR data from CSV files
@@ -14,13 +12,13 @@ import (
 func AggregateEvents(year string) error {
     outputPath := "output"
     // aggregate season opr files
-    omap, err := aggregation.ReadAndCombineEventOPRs(outputPath, year)
+    season, err := aggregation.ReadAndCombineEventOPRs(outputPath, year)
     if err != nil {
         return err
     }
     
     // write results to CSV file
-    err = aggregation.SeasonOPRtoCSV(omap, outputPath, year)
+    err = aggregation.SeasonOPRtoCSV(season, outputPath, year)
     if err != nil {
         return err
     }
