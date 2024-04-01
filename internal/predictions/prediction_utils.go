@@ -17,12 +17,6 @@ type Alliance struct {
 }
 
 
-// TODO: docs
-// TODO:
-func compareAlliances() {
-    return
-}
-
 
 // TODO: docs
 // TODO: get predicted contribution values for alliance 
@@ -42,7 +36,7 @@ func getAllianceOPR(teamKeys []string, season map[string]*aggregation.SeasonOPR)
         a.RPOPRs = append(a.RPOPRs, o.RPOPR)
     }
 
-    return Alliance{}, nil
+    return a, nil
 }
 
 
