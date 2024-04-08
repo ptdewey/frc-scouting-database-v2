@@ -23,13 +23,11 @@ func main() {
     }
     apiKey := os.Getenv("API_KEY")
 
-    runAnalyzer(apiKey)
-
     // Create new cron scheduler
     c := cron.New()
 
-    // Currently running every 5 minutes
-    c.AddFunc("*/10 8-20 * * *", func(){
+    // Currently running every 1 hour
+    c.AddFunc("1 8-20 * * *", func(){
         fmt.Println("Running scheduled job...")
         runAnalyzer(apiKey)
     })
@@ -57,6 +55,7 @@ func runAnalyzer(apiKey string) {
 
     // Get event data for specified event(s)
     for _, ek := range eventKeys {
+        // TODO: make the analyze event call a goroutine for parallelism
         _, err := app.AnalyzeEvent(ek, apiKey)
         if err != nil {
             fmt.Printf("Error analyzing event %s: %v\n", ek, err)

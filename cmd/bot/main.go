@@ -34,7 +34,7 @@ func main() {
     }
     
     // Define cron job
-    cronSchedule := "1,31 9-19 * * 5,6,0"
+    cronSchedule := "1 9-19 * * 5,6,0"
 
     // Start bot
     bot.Start(botToken, channelID, cronSchedule)
