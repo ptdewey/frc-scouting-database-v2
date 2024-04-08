@@ -139,6 +139,8 @@ func SeasonOPRtoCSV(seasonOPRs map[string]*SeasonOPR, outputPath, year string) e
                 // break
             }
         }
+        // TODO: insertion sort inplace to sort file
+        // - alternatively read file after writing and sort (this is probably better)
         w.Write(row)
     }
 
