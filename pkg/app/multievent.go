@@ -1,6 +1,8 @@
 package app
 
-import "github.com/ptdewey/frc-scouting-database-v2/internal/aggregation"
+import (
+	"github.com/ptdewey/frc-scouting-database-v2/internal/aggregation"
+)
 
 // AggregateEvents aggregates OPR data for all events within a specified year into a single CSV file.
 // It serves as a high-level function that orchestrates the process of reading event-specific OPR data from CSV files
@@ -10,18 +12,25 @@ import "github.com/ptdewey/frc-scouting-database-v2/internal/aggregation"
 // only if the map is non-empty. This automated process simplifies the generation of season-wide OPR summaries, but returns
 // an error if any step in the read-combine-write pipeline fails or if the aggregated data is deemed invalid due to its length.
 func AggregateEvents(year string) error {
-    outputPath := "output"
-    // aggregate season opr files
-    season, err := aggregation.ReadAndCombineEventOPRs(outputPath, year)
-    if err != nil {
-        return err
-    }
-    
-    // write results to CSV file
-    err = aggregation.SeasonOPRtoCSV(season, outputPath, year)
-    if err != nil {
-        return err
-    }
+	outputPath := "output"
 
-    return nil
+	// FIX: missing perms, figure out where to put this also
+	// err := os.MkdirAll(filepath.Join(outputPath, year), os.ModePerm)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// aggregate season opr files
+	season, err := aggregation.ReadAndCombineEventOPRs(outputPath, year)
+	if err != nil {
+		return err
+	}
+
+	// write results to CSV file
+	err = aggregation.SeasonOPRtoCSV(season, outputPath, year)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

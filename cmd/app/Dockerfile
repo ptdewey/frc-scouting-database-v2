@@ -10,12 +10,12 @@ ENV TZ=America/New_York
 
 COPY . .
 
-ARG UID
-ARG GID
+# ARG GID
+# ARG UID
 
-RUN addgroup -g $GID appgroup && \
-    adduser -u $UID -G appgroup -D appuser
-RUN chown -R appuser:appgroup /app
-USER appuser
+# RUN addgroup -g $GID appgroup && \
+#     adduser -u $UID -G appgroup -D appuser
+# RUN chown -R appuser:appgroup /app
+# USER appuser
 
 ENTRYPOINT [ "go", "run", "/app/cmd/app/main.go" ]
