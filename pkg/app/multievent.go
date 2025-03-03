@@ -11,19 +11,20 @@ import (
 // aggregation results in a valid dataset by checking the size of the resulting OPR map; it proceeds to write the results
 // only if the map is non-empty. This automated process simplifies the generation of season-wide OPR summaries, but returns
 // an error if any step in the read-combine-write pipeline fails or if the aggregated data is deemed invalid due to its length.
-func AggregateEvents(year string) error {
-    outputPath := "output"
-    // aggregate season opr files
-    omap, err := aggregation.ReadAndCombineEventOPRs(outputPath, year)
-    if err != nil {
-        return err
-    }
-    
-    // write results to CSV file
-    err = aggregation.SeasonOPRtoCSV(omap, outputPath, year)
-    if err != nil {
-        return err
-    }
+func AggregateEvents(year string) (map[string]*aggregation.SeasonOPR, error) {
+	outputPath := "output"
 
-    return nil
+	// aggregate season opr files
+	season, err := aggregation.ReadAndCombineEventOPRs(outputPath, year)
+	if err != nil {
+		return nil, err
+	}
+
+	// write results to CSV file
+	err = aggregation.SeasonOPRtoCSV(season, outputPath, year)
+	if err != nil {
+		return nil, err
+	}
+
+	return season, nil
 }
