@@ -25,4 +25,5 @@ go.work
 
 # Output files
 output/
+*.csv
 *example_data/
