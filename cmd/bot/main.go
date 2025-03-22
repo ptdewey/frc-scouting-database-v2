@@ -34,7 +34,7 @@ func main() {
 	}
 
 	// Define cron job
-	cronSchedule := "2 10-18 * * 6,0"
+	cronSchedule := "1 10-18 * * 6,0"
 	// cronSchedule := "1 9-19 * * *"
 
 	// Start bot

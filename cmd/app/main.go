@@ -17,9 +17,7 @@ import (
 // It determines which events be evaluated.
 func runAnalyzer(apiKey string) {
 	// Manually specify events to fetch data for
-	eventKeys := []string{
-		"2025vagle",
-	}
+	eventKeys := []string{}
 
 	// Get event data for specified event(s)
 	for _, ek := range eventKeys {
@@ -38,6 +36,8 @@ func runAnalyzer(apiKey string) {
 		fmt.Println("Error analyzing current events.", err)
 		return
 	}
+
+	// REFACTOR: Switch csv storage to a sqlite db, csvs on request
 
 	// Aggregate opr data for given year
 	seasonOPRs, err := app.AggregateEvents(year)
