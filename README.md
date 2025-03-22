@@ -16,7 +16,7 @@ git clone https://github.com/ptdewey/frc-scouting-database-v2.git
 3. Add 2 .env files in `config/` (create this directory if necessary):
     - app.env (containing a The Blue Alliance api key that can be obtained from their website)
         - `API_KEY="{api-key}"`
-    - bot.env (containg a discord bot token and channel id to send automated updates to) 
+    - bot.env (containg a discord bot token and channel id to send automated updates to)
         - `DISCORD_BOT_TOKEN="{bot-token}"`
         - `DISCORD_CHANNEL_ID="{channl-id}"`
 4. Run using Docker Compose.
@@ -24,7 +24,7 @@ git clone https://github.com/ptdewey/frc-scouting-database-v2.git
 docker-compose up --build -d
 ```
 
-After this, the application will be running in two separate containers, one for the data exporter bot and one for the event analyzer.  
+After this, the application will be running in two separate containers, one for the data exporter bot and one for the event analyzer.
 Output data can be found in the project-root/output directory with subfolders for years and events, with event folders being named by event key.
 
 <!-- TODO: data dictionary -->

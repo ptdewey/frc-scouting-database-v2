@@ -78,8 +78,8 @@ func main() {
 	// Create new cron scheduler
 	c := cron.New()
 
-	// Currently running every 2 hours
-	c.AddFunc("1 8-18 * * 6,0", func() {
+	// Currently running every 1 hours
+	c.AddFunc("1 8-18 * * 0,5,6", func() {
 		fmt.Println("Running scheduled job...")
 		runAnalyzer(apiKey)
 	})
